@@ -18,9 +18,12 @@ from pathlib import Path
 
 env = environ.Env(
     DEBUG=(bool, False),
-    # EMAIL_HOST=(str, 'localhost'),
-    # EMAIL_PORT=(int, 465),
-    # EMAIL_USE_TLS=(bool, False)
+    EMAIL_HOST=(str, 'localhost'),
+    EMAIL_PORT=(int, 465),
+    EMAIL_USE_TLS=(bool, False),
+    EMAIL_HOST_USER=(str, 'user'),
+    EMAIL_HOST_PASSWORD=(str, 'password'),
+    DEFAULT_FROM_EMAIL=(str, 'user@localhost')
 )
 
 
