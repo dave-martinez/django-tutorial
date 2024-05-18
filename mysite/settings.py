@@ -10,12 +10,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import environ
+import os
 import sys
 
 from pathlib import Path
 
+env = environ.Env(
+    DEBUG=(bool, False),
+    # EMAIL_HOST=(str, 'localhost'),
+    # EMAIL_PORT=(int, 465),
+    # EMAIL_USE_TLS=(bool, False)
+)
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +37,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-7^@jn&lp^$1l9=%=t6ni=hkfip7$)2=&e4=hn@0q392%vym9=f"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +52,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    "allauth",
+    "allauth.account",
+
     'polls.apps.PollsConfig',
 ]
 
@@ -51,6 +66,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "mysite.urls"
@@ -104,6 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -146,3 +169,17 @@ if ENABLE_DEBUG_TOOLBAR:
     # Customize the config to support turbo and htmx boosting.
     DEBUG_TOOLBAR_CONFIG = {
         "ROOT_TAG_EXTRA_ATTRS": "data-turbo-permanent hx-preserve"}
+
+
+# Mail Settings
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+
+
+# Django all_auth Settings
+
+LOGIN_REDIRECT_URL = '/polls/'
