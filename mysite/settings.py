@@ -23,7 +23,9 @@ env = environ.Env(
     EMAIL_USE_TLS=(bool, False),
     EMAIL_HOST_USER=(str, 'user'),
     EMAIL_HOST_PASSWORD=(str, 'password'),
-    DEFAULT_FROM_EMAIL=(str, 'user@localhost')
+    DEFAULT_FROM_EMAIL=(str, 'user@localhost'),
+    ACCOUNT_LOGIN_BY_CODE_ENABLED=(bool, False),
+    SIGNUP_ENABLED=(bool, False),
 )
 
 
@@ -57,6 +59,7 @@ INSTALLED_APPS = [
 
     "allauth",
     "allauth.account",
+    'allauth.mfa',
 
     'polls.apps.PollsConfig',
 ]
@@ -182,7 +185,10 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
+ACCOUNT_LOGIN_BY_CODE_ENABLED = env('ACCOUNT_LOGIN_BY_CODE_ENABLED')
 
 # Django all_auth Settings
 
 LOGIN_REDIRECT_URL = '/polls/'
+SIGNUP_ENABLED = env('SIGNUP_ENABLED')
+ACCOUNT_ADAPTER = 'mysite.allauth.account_adapter.NoNewUsersAccountAdapter'
