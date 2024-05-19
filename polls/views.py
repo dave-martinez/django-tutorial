@@ -1,8 +1,10 @@
+from allauth.account.decorators import verified_email_required
 from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from .models import Question, Choice
@@ -14,6 +16,10 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+
+    @method_decorator(verified_email_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DetailView(generic.DetailView):

@@ -190,5 +190,6 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = env('ACCOUNT_LOGIN_BY_CODE_ENABLED')
 # Django all_auth Settings
 
 LOGIN_REDIRECT_URL = '/polls/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/polls/'
 SIGNUP_ENABLED = env('SIGNUP_ENABLED')
 ACCOUNT_ADAPTER = 'mysite.allauth.account_adapter.NoNewUsersAccountAdapter'

@@ -1,10 +1,4 @@
-{% extends "polls/layout.html" %}
-{% load static %}
-
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-{% endblock %}
-
+{% extends "polls/layouts/base.html" %}
 
 {% block content %}
 
@@ -41,4 +35,4 @@
     {% endif %}
 </div>
 
-{% endblock %}
+    {% endblock %}
