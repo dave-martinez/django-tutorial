@@ -1,0 +1,92 @@
+{% extends "polls/layouts/base.html" %}
+
+{% load i18n %}
+{% load allauth account %}
+
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+
+{% setvar link %}
+    <a href="{{ signup_url }}">
+    {% endsetvar %}
+    {% setvar end_link %}
+    </a>
+{% endsetvar %}
+
+{% block content %}
+<div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+            <h1 class="text-5xl font-bold">Dashboard</h1>
+                <p class="py-6">If you have not created an account yet, then please 
+                  <a class="link" href="{{signup_url}}">sign up</a> first.</p>
+        </div>
+        <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            {% url 'account_login' as login_url %}
+            <form class="card-body" method="POST" action="{{login_url}}">
+                {% csrf_token %}
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Username</span>
+                    </label>
+                    <input name="login" type="text" placeholder="Username" class="input input-bordered" required />
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Password</span>
+                    </label>
+                    <input name="password" type="password" placeholder="password" class="input input-bordered" required />
+                    <label class="label">
+                        <a href="{% url 'account_reset_password' %}" class="label-text-alt link link-hover">Forgot password?</a>
+                    </label>
+                </div>
+                <div class="form-control mt-6">
+                    <button class="btn btn-primary">Login</button>
+                </div>
+                {{ redirect_field }}
+            </form>
+        </div>
+    </div>
+
+    <!-- {% if not SOCIALACCOUNT_ONLY %} -->
+    <!--     {% setvar link %} -->
+    <!--         <a href="{{ signup_url }}"> -->
+    <!--         {% endsetvar %} -->
+    <!--         {% setvar end_link %} -->
+    <!--         </a> -->
+    <!--     {% endsetvar %} -->
+    <!--     {% element p %} -->
+    <!--         {% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %} -->
+    <!--     {% endelement %} -->
+    <!--     {% url 'account_login' as login_url %} -->
+    <!--     {% element form form=form method="post" action=login_url tags="entrance,login" %} -->
+    <!--         {% slot body %} -->
+    <!--             {% csrf_token %} -->
+    <!--             {% element fields form=form unlabeled=True %} -->
+    <!--             {% endelement %} -->
+    <!--             {{ redirect_field }} -->
+    <!--         {% endslot %} -->
+    <!--         {% slot actions %} -->
+    <!--             {% element button type="submit" tags="prominent,login" %} -->
+    <!--                 {% trans "Sign In" %} -->
+    <!--             {% endelement %} -->
+    <!--         {% endslot %} -->
+    <!--     {% endelement %} -->
+    <!-- {% endif %} -->
+
+    {% if LOGIN_BY_CODE_ENABLED %}
+        {% element hr %}
+        {% endelement %}
+        {% element h2 %}
+            {% element button href=request_login_code_url tags="prominent,login,secondary" %}
+                {% trans "Mail me a sign-in code" %}
+            {% endelement %}
+        {% endelement %}
+    {% endif %}
+
+    {% if SOCIALACCOUNT_ENABLED %}
+        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+</div>
+{% endblock content %}
