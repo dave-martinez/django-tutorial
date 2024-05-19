@@ -1,16 +1,32 @@
 {% extends "polls/layouts/base.html" %}
 
 {% block content %}
-<form action="{% url 'polls:vote' question.id %}" method="post">
+<form class="max-w-96 w-full mx-auto" action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
-<fieldset>
-    <legend><h1>{{ question.question_text }}</h1></legend>
+    <h2 class="text-4xl">{{ question.question_text }}</h2>
+    <div class="bg-primary my-8 p-4 rounded-md">
+
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        <div class="form-control">
+          <label for="choice{{ forloop.counter }}" class="label cursor-pointer">
+                <span class="label-text">{{ choice.choice_text }}</span> 
+                <input 
+                    type="radio" 
+                    name="choice" 
+                    id="choice{{forloop.counter}}"
+                    value="{{choice.id}}"
+                    class="radio checked:bg-red-500" 
+                />
+          </label>
+        </div>
     {% endfor %}
-</fieldset>
-<input type="submit" value="Vote">
+
+    </div>
+
+    <div class="flex justify-center">
+        <button class="btn btn-outline" type="submit">Vote</button>
+    </div>
+
 </form>
 {% endblock %}
