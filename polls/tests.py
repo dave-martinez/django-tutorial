@@ -1,8 +1,10 @@
 import datetime
 
-from django.test import TestCase
-from django.utils import timezone
+from allauth.account.models import EmailAddress
+from django.contrib.auth import get_user_model
+from django.test import TestCase, Client
 from django.urls import reverse
+from django.utils import timezone
 
 from .models import Question
 
@@ -15,6 +17,18 @@ def create_question(question_text, days):
     """
     time = timezone.now() + datetime.timedelta(days=days)
     return Question.objects.create(question_text=question_text, pub_date=time)
+
+
+def create_user(username, password):
+    user = get_user_model().objects.create(username=username)
+    user.set_password(password)
+    user.save()
+    EmailAddress.objects.create(
+        user=user,
+        email=f"{username}@example.org",
+        primary=True,
+        verified=True,
+    )
 
 
 class QuestionModelTests(TestCase):
@@ -56,6 +70,13 @@ class QuestionIndexViewTests(TestCase):
         """
         If no questions exist, an appropriate message is displayed.
         """
+
+        create_user('foo', 'bar')
+        self.client.post(
+            reverse("account_login"),
+            {"login": "foo", "password": "bar"},
+        )
+
         response = self.client.get(reverse('polls:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No polls are available.")
@@ -66,6 +87,12 @@ class QuestionIndexViewTests(TestCase):
         Questions with a pub_date in the past are displayed on the
         index page.
         """
+        create_user('foo', 'bar')
+        self.client.post(
+            reverse("account_login"),
+            {"login": "foo", "password": "bar"},
+        )
+
         q = create_question(question_text="Past question.", days=-30)
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
@@ -78,7 +105,13 @@ class QuestionIndexViewTests(TestCase):
         Questions with a pub_date in the future aren't displayed on
         the index page.
         """
+        create_user('foo', 'bar')
+        self.client.post(
+            reverse("account_login"),
+            {"login": "foo", "password": "bar"},
+        )
         create_question(question_text="Future question.", days=30)
+
         response = self.client.get(reverse('polls:index'))
         self.assertContains(response, "No polls are available.")
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
@@ -88,6 +121,12 @@ class QuestionIndexViewTests(TestCase):
         Even if both past and future questions exist, only past questions
         are displayed.
         """
+        create_user('foo', 'bar')
+        self.client.post(
+            reverse("account_login"),
+            {"login": "foo", "password": "bar"},
+        )
+
         q1 = create_question(question_text="Past question.", days=-30)
         create_question(question_text="Future question.", days=30)
         response = self.client.get(reverse('polls:index'))
@@ -100,8 +139,16 @@ class QuestionIndexViewTests(TestCase):
         """
         The questions index page may display multiple questions.
         """
+        create_user('foo', 'bar')
+        self.client.post(
+            reverse("account_login"),
+            {"login": "foo", "password": "bar"},
+        )
+
+        create_question(question_text="Future question.", days=30)
         q1 = create_question(question_text="Past question 1.", days=-30)
         q2 = create_question(question_text="Past question 2.", days=-5)
+
         response = self.client.get(reverse('polls:index'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],

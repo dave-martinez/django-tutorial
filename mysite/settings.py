@@ -45,6 +45,12 @@ SECRET_KEY = "django-insecure-7^@jn&lp^$1l9=%=t6ni=hkfip7$)2=&e4=hn@0q392%vym9=f
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS += [
+        'localhost',
+        '127.0.0.1',
+        'testserver'
+    ]
 
 
 # Application definition
