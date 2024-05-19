@@ -14,14 +14,14 @@
         </thead>
         <tbody>
             {% for question in latest_question_list %}
-            <tr class="hover">
+            <tr class="hover" href="{% url 'polls:detail' question.id %}">
                 <td>
-                    <a href="{% url 'polls:detail' question.id %}">
+                    <a class="link" href="{% url 'polls:detail' question.id %}">
                         {{question.id}}
                     </a>
                 </td>
                 <td>
-                    <a href="{% url 'polls:detail' question.id %}">
+                    <a class="link" href="{% url 'polls:detail' question.id %}">
                         {{question.question_text}}
                     </a>
                 </td>
@@ -30,6 +30,16 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="flex justify-center join my-4 gap-1">
+        {% if page_obj.has_previous %}
+        <a class="join-item btn" href="?page={{ page_obj.previous_page_number }}">«</a>
+        {% endif %}
+        <a class="join-item btn">Page {{ page_obj.number }}</a>
+        {% if page_obj.has_next %}
+        <a class="join-item btn" href="?page={{ page_obj.next_page_number }}">»</a>
+        {% endif %}
+    </div>
     {% else %}
     <p>No polls are available.</p>
     {% endif %}

@@ -13,9 +13,10 @@ from .models import Question, Choice
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
+    paginate_by = 10
 
     def get_queryset(self):
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
 
     @method_decorator(verified_email_required)
     def dispatch(self, request, *args, **kwargs):
