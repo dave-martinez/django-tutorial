@@ -21,12 +21,6 @@ from django.urls import path, include, reverse
 from django.shortcuts import redirect
 
 
-def view_404(request, exception):
-    return redirect(reverse('polls:index'))
-
-
-handler404 = view_404
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("polls/", include('polls.urls')),

@@ -162,6 +162,11 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the future
         returns a 404 not found.
         """
+        create_user('foo', 'bar')
+        self.client.post(
+            reverse("account_login"),
+            {"login": "foo", "password": "bar"},
+        )
         future_question = create_question(
             question_text="Future question.", days=5)
         url = reverse("polls:detail", args=(future_question.id,))
@@ -173,6 +178,11 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the past
         displays the question's text.
         """
+        create_user('foo', 'bar')
+        self.client.post(
+            reverse("account_login"),
+            {"login": "foo", "password": "bar"},
+        )
         past_question = create_question(
             question_text="Past Question.", days=-5)
         url = reverse("polls:detail", args=(past_question.id,))
