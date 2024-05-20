@@ -17,7 +17,15 @@ Including another URLconf
 
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse
+from django.shortcuts import redirect
+
+
+def view_404(request, exception):
+    return redirect(reverse('polls:index'))
+
+
+handler404 = view_404
 
 urlpatterns = [
     path("admin/", admin.site.urls),
