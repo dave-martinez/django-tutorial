@@ -4,11 +4,11 @@
 {% block content %}
 
 <div class="overflow-x-auto">
-    <h1 class="text-bold text-2xl">Polls</h1>
     <div class="flex justify-center">
         {% component "stats" stats=stats %}{% endcomponent %}
     </div>
     {% if latest_question_list %}
+    {% component "flash_messages" messages=messages %}{% endcomponent %}
     <table class="table">
         <thead>
             <tr>

@@ -1,7 +1,8 @@
 from allauth.account.decorators import verified_email_required
+from django.contrib import messages
 from django.db.models import F
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -37,10 +38,13 @@ class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
 
-    def get_queryset(self):
-        return Question.objects.filter(pub_date__lte=timezone.now())
+    def get(self, request, *args, **kwargs):
+        if self.get_object().pub_date > timezone.now():
+            messages.error(request, "This poll is not available yet.")
+            return redirect('polls:index')
+        return super().get(request, *args, **kwargs)
 
-    @ method_decorator(verified_email_required)
+    @method_decorator(verified_email_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 

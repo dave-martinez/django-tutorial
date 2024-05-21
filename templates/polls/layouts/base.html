@@ -19,9 +19,16 @@
         {% include 'polls/elements/navbar.html' %}
         {% block body %}
         <main class="container mx-auto px-4">
+            <div class="text-sm breadcrumbs">
+              <ul>
+                <li><a>Home</a></li> 
+                <li><a>Documents</a></li> 
+                <li>Add Document</li>
+              </ul>
+            </div>
             {% block content %}
             {% endblock content %}
-            </main>
+        </main>
         {% endblock body %}
         {% block extra_body %}
         {% endblock extra_body %}
