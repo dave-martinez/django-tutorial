@@ -16,9 +16,19 @@ class IndexView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
+        return Question.objects.all().order_by('-pub_date')
 
-    @method_decorator(verified_email_required)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stats'] = [
+            {'label': 'Published', 'value': Question.objects.filter(
+                pub_date__lte=timezone.now()).count()},
+            {'label': 'Total questions',
+                'value': context['latest_question_list'].count()},
+        ]
+        return context
+
+    @ method_decorator(verified_email_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -30,7 +40,7 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
-    @method_decorator(verified_email_required)
+    @ method_decorator(verified_email_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 

@@ -1,8 +1,13 @@
 {% extends "polls/layouts/base.html" %}
+{% load component_tags %}
 
 {% block content %}
 
 <div class="overflow-x-auto">
+    <h1 class="text-bold text-2xl">Polls</h1>
+    <div class="flex justify-center">
+        {% component "stats" stats=stats %}{% endcomponent %}
+    </div>
     {% if latest_question_list %}
     <table class="table">
         <thead>
@@ -25,7 +30,7 @@
                         {{question.question_text}}
                     </a>
                 </td>
-                <td>{{question.was_published_recently}}</td>
+                <td>{{question.published}}</td>
             </tr>
             {% endfor %}
         </tbody>

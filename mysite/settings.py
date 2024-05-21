@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     'allauth.mfa',
+    'django_components',
 
     'polls.apps.PollsConfig',
 ]
@@ -84,11 +85,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "mysite.urls"
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "components"),
+]
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
+        # "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -96,6 +101,13 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            'loaders': [(
+                'django.template.loaders.cached.Loader', [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                    'django_components.template_loader.Loader',
+                ]
+            )],
         },
     },
 ]

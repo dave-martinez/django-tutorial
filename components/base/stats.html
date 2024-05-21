@@ -1,0 +1,8 @@
+<div class="stats text-primary-content gap-4">
+    {% for stat in stats %}
+    <div class="bg-primary stat">
+        <div class="stat-title">{{stat.label}}</div>
+        <div class="stat-value">{{stat.value}}</div>
+    </div>
+    {% endfor %}
+</div>
